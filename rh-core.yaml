@@ -1,0 +1,57 @@
+#==================================================================================================
+#! @file      rh-core.yaml
+#! @author    Geon Technologies (geon.tech)
+#! @copyright 2022 Geon Technologies, LLC. All rights reserved.
+#! @license   GPLv3
+#! @brief     Kubernetes Deployment for the core services of REDHAWK SDR
+#==================================================================================================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rh-core
+  labels:
+    app: redhawk
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redhawk
+  template:
+    metadata:
+      labels:
+        app: redhawk
+    spec:
+      containers:
+      - name: omniserver
+        image: geontech/redhawk-omniserver:2.2.5
+        ports:
+          - containerPort: 2809
+          - containerPort: 11189
+      - name: domain
+        image: geontech/redhawk-domain:2.2.5
+        env:
+        - name: DOMAINNAME
+          value: REDHAWK_DEV
+        volumeMounts:
+        - name: sdrroot
+          mountPath: /var/redhawk/sdr
+      - name: development
+        image: geontech/redhawk-cluster-development:2.2.5
+        ports:
+          - containerPort: 22
+        volumeMounts:
+        - name: sdrroot
+          mountPath: /var/redhawk/sdr
+      initContainers:
+      - name: sdrroot-init
+        image: geontech/redhawk-cluster-development:2.2.5
+        command:
+        - "/bin/bash"
+        - "-c"
+        - "cp -rf /var/redhawk/sdr/* /root/sdr/"
+        volumeMounts:
+        - name: sdrroot
+          mountPath: /root/sdr
+      volumes:
+      - name: sdrroot
+        emptyDir: {}

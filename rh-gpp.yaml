@@ -1,0 +1,31 @@
+#==================================================================================================
+#! @file      rh-gpp.yaml
+#! @author    Geon Technologies (geon.tech)
+#! @copyright 2022 Geon Technologies, LLC. All rights reserved.
+#! @license   GPLv3
+#! @brief     Kubernetes Deployment for the REDHAWK SDR General Purpose Processor (GPP) Device
+#==================================================================================================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rh-gpp
+  labels:
+    app: redhawk-gpp
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: redhawk-gpp
+  template:
+    metadata:
+      labels:
+        app: redhawk-gpp
+    spec:
+      containers:
+      - name: gpp
+        image: geontech/redhawk-gpp:2.2.5
+        env:
+        - name: OMNISERVICEIP
+          value: rh-core-omniserver
+        - name: DOMAINNAME
+          value: REDHAWK_DEV

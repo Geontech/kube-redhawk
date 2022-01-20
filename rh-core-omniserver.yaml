@@ -1,0 +1,21 @@
+#==================================================================================================
+#! @file      rh-core-omniserver.yaml
+#! @author    Geon Technologies (geon.tech)
+#! @copyright 2022 Geon Technologies, LLC. All rights reserved.
+#! @license   GPLv3
+#! @brief     Kubernetes Service to facilitate communications between rh-core and rh-gpp pods
+#==================================================================================================
+apiVersion: v1
+kind: Service
+metadata:
+  name: rh-core-omniserver
+spec:
+  selector:
+    app: redhawk
+  ports:
+  - name: omninames
+    port: 2809
+    protocol: TCP
+  - name: omnievents
+    port: 11189
+    protocol: TCP

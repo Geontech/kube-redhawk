@@ -1,0 +1,22 @@
+#==================================================================================================
+#! @file      rh-core-ssh.yaml
+#! @author    Geon Technologies (geon.tech)
+#! @copyright 2022 Geon Technologies, LLC. All rights reserved.
+#! @license   GPLv3
+#! @brief     Kubernetes Service to facilitate an "ssh -X root@<CLUSTER_IP> -p 30022" connection
+#!            to the development container
+#==================================================================================================
+apiVersion: v1
+kind: Service
+metadata:
+  name: rh-core-ssh
+spec:
+  type: NodePort
+  selector:
+    app: redhawk
+  ports:
+    - name: ssh
+      protocol: TCP
+      port: 22
+      targetPort: 22
+      nodePort: 30022
